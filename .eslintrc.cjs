@@ -10,11 +10,9 @@ module.exports = {
       files: ["*.ts", "*.tsx"],
       rules: {
         "@typescript-eslint/naming-convention": "off",
-      },
-    },
-    {
-      files: ["*.ts", "*.tsx"],
-      rules: {
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-argument": "off",
+        "@typescript-eslint/consistent-type-assertions": "off",
         "@typescript-eslint/consistent-type-definitions": [
           "error",
           "interface",
