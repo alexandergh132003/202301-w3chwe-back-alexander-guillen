@@ -5,12 +5,12 @@ import type CustomError from "../../CustomError/CustomError.js";
 
 const debug = createDebug("network:errors");
 
-const errorHandler = (
+export const errorHandler = (
   error: CustomError,
   request: Request,
   response: Response
 ) => {
-  debug(error.message);
+  debug(chalk.redBright(error.message));
 
   response
     .status(error.statusCode || 500)

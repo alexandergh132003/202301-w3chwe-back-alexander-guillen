@@ -8,6 +8,18 @@ module.exports = {
     {
       extends: ["xo-typescript", "prettier"],
       files: ["*.ts", "*.tsx"],
+      rules: {
+        "@typescript-eslint/naming-convention": "off",
+      },
+    },
+    {
+      files: ["*.ts", "*.tsx"],
+      rules: {
+        "@typescript-eslint/consistent-type-definitions": [
+          "error",
+          "interface",
+        ],
+      },
     },
   ],
   parserOptions: {
@@ -15,6 +27,7 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
+    "new-cap": ["error", { capIsNewExceptions: ["Router"] }],
     "no-implicit-coercion": "off",
   },
 };
