@@ -16,3 +16,13 @@ export interface TokenStructure {
 export interface ErrorResponseStructure {
   error: string;
 }
+
+export interface CreateRelationShipStructure {
+  userId: string;
+  user2Id: string;
+  relationtype: string;
+}
+
+export interface NewRelationshipResponseStructure {
+  response: string;
+}
