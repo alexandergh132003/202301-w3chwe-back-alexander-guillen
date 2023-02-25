@@ -1,6 +1,6 @@
 import createDebug from "debug";
 import { type NextFunction, type Request, type Response } from "express";
-import { type CreateRelationShipStructure } from "../../../types.js";
+import { type RelationShipRequestStructure } from "../../../types.js";
 import User from "../../../database/models/User.js";
 import { Relationship } from "../../../database/models/Relationship.js";
 import CustomError from "../../../CustomError/CustomError.js";
@@ -11,7 +11,7 @@ const createRelationship = async (
   request: Request<
     Record<string, unknown>,
     Record<string, unknown>,
-    CreateRelationShipStructure
+    RelationShipRequestStructure
   >,
   response: Response,
   next: NextFunction
@@ -20,7 +20,7 @@ const createRelationship = async (
     const { user2Id, userId, relationtype } = request.body;
 
     const user = await User.findById(userId);
-    const desiredEnemyOrFriend = await User.findById(user);
+    const desiredEnemyOrFriend = await User.findById(user2Id);
 
     if (!user || !desiredEnemyOrFriend) {
       const userNotFoundError = new CustomError(

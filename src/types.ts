@@ -17,12 +17,12 @@ export interface ErrorResponseStructure {
   error: string;
 }
 
-export interface CreateRelationShipStructure {
+export interface RelationShipRequestStructure {
   userId: string;
   user2Id: string;
   relationtype: string;
 }
 
-export interface NewRelationshipResponseStructure {
+export interface RelationshipResponseStructure {
   response: string;
 }
