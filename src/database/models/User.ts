@@ -1,4 +1,5 @@
 import { model, Schema } from "mongoose";
+import { relationshipSchema } from "./Relationship.js";
 
 const userSchema = new Schema({
   username: {
@@ -15,6 +16,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  relations: [relationshipSchema],
 });
 
 const User = model("User", userSchema, "users");
