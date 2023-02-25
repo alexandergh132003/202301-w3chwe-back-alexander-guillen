@@ -41,9 +41,9 @@ const deleteRelationShip = async (
       ],
     });
 
-    await user.update({ $pull: { relations: { _id: relationship!._id } } });
+    await user.update({ $pull: { relations: { _id: relationship?._id } } });
     await enemyOrFriend.update({
-      $pull: { relations: { _id: relationship!._id } },
+      $pull: { relations: { _id: relationship?._id } },
     });
 
     await relationship?.delete();
