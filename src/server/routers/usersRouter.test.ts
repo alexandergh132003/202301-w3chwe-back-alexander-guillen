@@ -6,8 +6,8 @@ import connectToDatabase from "../../database/connectToDatabase.js";
 import User from "../../database/models/User.js";
 import app from "../index.js";
 import {
-  type NewRelationshipResponseStructure,
-  type CreateRelationShipStructure,
+  type RelationshipResponseStructure,
+  type RelationShipRequestStructure,
   type ErrorResponseStructure,
   type TokenStructure,
   type UserCredentials,
@@ -78,7 +78,7 @@ describe("Given POST /users/login endpoint", () => {
   });
 });
 
-describe("Given a POST /users/relationship", () => {
+describe("Given a /users/relationship path", () => {
   beforeAll(async () => {
     const Alexander = new User({
       username: "Alexander",
@@ -99,28 +99,28 @@ describe("Given a POST /users/relationship", () => {
     await Alexandra.save();
   });
 
-  const createRelationRequest: CreateRelationShipStructure = {
+  const relationRequest: RelationShipRequestStructure = {
     userId: "63fa1109f2df6dd57752a24e",
     user2Id: "63fa1117ee90ea8431f81764",
     relationtype: "friend",
   };
 
-  describe("When a request is sent to it with userId '63fa1109f2df6dd57752a24e' user2Id '63fa1117ee90ea8431f81764' and relationType 'friend'", () => {
+  describe("When a POST request is sent to it with userId '63fa1109f2df6dd57752a24e' user2Id '63fa1117ee90ea8431f81764' and relationType 'friend'", () => {
     test("Then it should respond with status 201 and message 'New relationship: Alexander & Alexandra (friend)'", async () => {
-      const newRelationShip: NewRelationshipResponseStructure = {
+      const newRelationShip: RelationshipResponseStructure = {
         response: "New relationship: Alexander & Alexandra (friend)",
       };
 
       const response = await request(app)
         .post("/users/relationship")
-        .send(createRelationRequest)
+        .send(relationRequest)
         .expect(201);
 
       expect(response.body).toStrictEqual(newRelationShip);
     });
   });
 
-  describe("When a new request is sent to it with userId '63fa1109f2df6dd57752a24e' user2Id '63fa1117ee90ea8431f81764' and relationType 'friend'", () => {
+  describe("When a new POST request is sent to it with userId '63fa1109f2df6dd57752a24e' user2Id '63fa1117ee90ea8431f81764' and relationType 'friend'", () => {
     test("Then it should respond with status 409 and message 'A relationship between this users already exists'", async () => {
       const error: ErrorResponseStructure = {
         error: "A relationship between this users already exists",
@@ -128,10 +128,45 @@ describe("Given a POST /users/relationship", () => {
 
       const response = await request(app)
         .post("/users/relationship")
-        .send(createRelationRequest)
+        .send(relationRequest)
         .expect(409);
 
       expect(response.body).toStrictEqual(error);
+    });
+  });
+
+  describe("When a new DELETE request is sent to it with userId 'IncorrectId' user2Id 'IncorrectId'", () => {
+    test("Then it should respond with status 404 and message 'User not found'", async () => {
+      const error: ErrorResponseStructure = {
+        error: "User not found",
+      };
+      const badRequest: RelationShipRequestStructure = {
+        ...relationRequest,
+        userId: "IncorrectId",
+        user2Id: "IncorrectId",
+      };
+
+      const response = await request(app)
+        .delete("/users/relationship")
+        .send()
+        .expect(404);
+
+      expect(response.body).toStrictEqual(error);
+    });
+  });
+
+  describe("When a new DELETE request is sent to it with userId  '63fa1109f2df6dd57752a24e' user2Id '63fa1117ee90ea8431f81764'", () => {
+    test("Then it should repond with status 200 and message 'Removed relationship: Alexander & Alexandra'", async () => {
+      const removedRelationship: RelationshipResponseStructure = {
+        response: "Removed relationship: Alexander & Alexandra",
+      };
+
+      const response = await request(app)
+        .delete("/users/relationship")
+        .send(relationRequest)
+        .expect(200);
+
+      expect(response.body).toStrictEqual(removedRelationship);
     });
   });
 });
